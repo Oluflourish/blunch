@@ -1,0 +1,30 @@
+
+[
+    {
+        "image" : "assets/food3.png",
+        "name" : "4 Chicken Waffles + 2 Sausages + Syrup",
+        "price": "1,100"
+    },
+    {
+        "image" : "assets/food.png",
+        "name" : "4 Plain Waffles + 2 Sausages + Syrup",
+        "price": "900"
+    },
+    {
+        "image" : "assets/food2.png",
+        "name" : "Suya Stir Fry Noodles",
+        "price": "1,000"
+    },
+    {
+        "image" : "assets/food2.png",
+        "name" : "Suya Stir Fry Noodles + Extra Suya",
+        "price": "1,200"
+    },
+    {
+        "image" : "assets/zobo.png",
+        "name" : "Zobo",
+        "price": "200"
+    }
+
+    
+]

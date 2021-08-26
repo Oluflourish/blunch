@@ -1,0 +1,25 @@
+
+[
+    {
+        "image" : "assets/food3.png",
+        "name" : "Egg & Mayo Sandwich",
+        "price": "1,500"
+    },
+    {
+        "image" : "assets/food.png",
+        "name" : "Suya Stir Fry Noodles",
+        "price": "1,000"
+    },
+    {
+        "image" : "assets/food2.png",
+        "name" : "Suya Stir Fry Noodles + Extra Suya",
+        "price": "1,500"
+    },
+    {
+        "image" : "assets/zobo.png",
+        "name" : "Zobo",
+        "price": "200"
+    }
+
+    
+]

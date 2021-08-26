@@ -1,0 +1,30 @@
+
+[
+    {
+        "image" : "assets/food3.png",
+        "name" : "Chicken Stir Fry Noodles",
+        "price": "1,500"
+    },
+    {
+        "image" : "assets/pancake.png",
+        "name" : " 6 Pancakes + 2 Sausages + Syrup",
+        "price": "1,000"
+    },
+    {
+        "image" : "assets/food2.png",
+        "name" : "Suya Stir Fry Noodles",
+        "price": "1,000"
+    },
+    {
+        "image" : "assets/food2.png",
+        "name" : "Suya Stir Fry Noodles + Extra Suya",
+        "price": "1,200"
+    },
+    {
+        "image" : "assets/zobo.png",
+        "name" : "Zobo",
+        "price": "200"
+    }
+
+    
+]
