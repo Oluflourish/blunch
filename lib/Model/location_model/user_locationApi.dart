@@ -1,5 +1,5 @@
-import 'package:blunch/Model/user_location.dart';
 import 'dart:convert';
+import 'package:blunch/Model/location_model/user_location.dart';
 import 'package:http/http.dart' as http;
 
 class UserApi {

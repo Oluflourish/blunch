@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:blunch/Model/Order_model/tuesday.dart';
+import 'package:blunch/Model/Order_model/user_menu.dart';
 import 'package:flutter/material.dart';
 
 class TuesDayList extends StatefulWidget {
@@ -7,6 +9,8 @@ class TuesDayList extends StatefulWidget {
 }
 
 class _TuesDayListState extends State<TuesDayList> {
+  var quantity = 1;
+  var priceItems = 0;
   Future<List<Widget>> createList() async {
     List<Widget> items = new List<Widget>();
     String dataString =
@@ -14,92 +18,284 @@ class _TuesDayListState extends State<TuesDayList> {
     List<dynamic> dataJson = jsonDecode(dataString);
 
     dataJson.forEach((element) {
-      items.add(Padding(
-        padding: EdgeInsets.only(bottom: 20, top: 0),
-        child: Container(
-          height: 120,
-          width: 327,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            //color: Colors.blue,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                spreadRadius: 0.4,
-                // blurRadius: 5,
-              )
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24.0, top: 20, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Image.asset(
-                    element["image"],
-                    width: 80,
-                    height: 80,
-                  ),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 199,
-                      //height: 56,
-                      child: Text(
-                        element["name"],
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Gordita',
-                            color: Color(0xff1A1A1A),
-                            fontWeight: FontWeight.w700,
-                            fontStyle: FontStyle.normal),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
+      items.add(GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+              )),
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.all(24),
+                  height: MediaQuery.of(context).size.height - 150,
+                  child: Column(
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            "NGN ",
+                          Expanded(
+                              child: Text(
+                            element['name'],
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 20,
+                                color: Color(0xff14142B),
                                 fontFamily: 'Gordita',
-                                color: Color(0xff4F4F4F),
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.normal),
+                          )),
+                          SizedBox(
+                            width: 40,
                           ),
-                          Text(
-                            element["price"].toString(),
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Gordita',
-                                color: Color(0xff4F4F4F),
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal),
+                          IconButton(
+                              iconSize: 30,
+                              icon: Icon(
+                                Icons.cancel_outlined,
+                                color: Color(0xff14142B),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Container(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.asset(
+                          element['image'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        //crossAxisAlignment: CrossAxisAlignment,
+                        children: [
+                          Container(
+                              height: 32,
+                              width: 32,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Color(0xff7B0304))),
+                              child: FloatingActionButton(
+                                backgroundColor: Color(0xffFFFFFF),
+                                onPressed: () {
+                                  adjustQuality("minus");
+                                },
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 17,
+                                  color: Color(0xff7B0304),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(14.0),
+                            //Change to widge.price
+                            child: Text(
+                              quantity.toString(),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xff1A1A1A),
+                                  fontFamily: 'Gordita',
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal),
+                              //  quantity.toString(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Container(
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Color(0xff7B0304))),
+                            child: FloatingActionButton(
+                              backgroundColor: Color(0xffFFFFFF),
+                              onPressed: () {
+                                setState(() {
+                                  adjustQuality("plus");
+                                });
+                              },
+                              child: Icon(
+                                Icons.add,
+                                size: 17,
+                                color: Color(0xff7B0304),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20
+                              //left: 24,
+                              //  right: 24,
+                              ),
+                          child: Container(
+                            //alignment: Alignment.center,
+                            height: 56,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xff7B0304)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: RaisedButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Gordita',
+                                    color: Color(0xff7B0304),
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FontStyle.normal),
+                              ),
+                              color: Colors.white,
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              // shape: RoundedRectangleBorder(),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            height: 56,
+                            width: double.infinity,
+                            child: RaisedButton(
+                              child: Text(
+                                "Add for NGN " +
+                                    (int.parse(element["price"]) * quantity)
+                                        .toString(),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Gordita',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FontStyle.normal),
+                              ),
+                              color: Color(0xfff7B0304),
+                              textColor: Colors.white,
+                              onPressed: () {
+                                //Navigator.pop(context);
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        },
+
+        //Should end here
+        //Extract as widget
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20, top: 0),
+          child: Container(
+            height: 120,
+            width: 327,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              //color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 0.4,
+                  // blurRadius: 5,
+                )
               ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0, top: 20, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                //mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Image.asset(
+                      element["image"],
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 199,
+                        //height: 56,
+                        child: Text(
+                          element["name"],
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Gordita',
+                              color: Color(0xff1A1A1A),
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "NGN ",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Gordita',
+                                  color: Color(0xff4F4F4F),
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal),
+                            ),
+                            Text(
+                              element["price"].toString(),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Gordita',
+                                  color: Color(0xff4F4F4F),
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -116,7 +312,8 @@ class _TuesDayListState extends State<TuesDayList> {
         child: FutureBuilder(
             initialData: <Widget>[Text("")],
             future: createList(),
-            //MenuApi.getUserMenu(context),
+            //TuesdayMenu.tuesdayUserMenu(context),
+            // MenuApi.getUserMenu(context),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Padding(
@@ -133,6 +330,23 @@ class _TuesDayListState extends State<TuesDayList> {
             }),
       ),
     );
+  }
+
+  adjustQuality(pressed) {
+    switch (pressed) {
+      case 'plus':
+        setState(() {
+          quantity += 1;
+        });
+        return;
+      case 'minus':
+        setState(() {
+          if (quantity != 1) {
+            quantity -= 1;
+          }
+        });
+        return;
+    }
   }
 }
 
@@ -251,6 +465,7 @@ class _WednesDayListState extends State<WednesDayList> {
         child: FutureBuilder(
             initialData: <Widget>[Text("")],
             future: createList(),
+            //MenuWednesday.getUserMenu(context),
             //MenuApi.getUserMenu(context),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -277,6 +492,9 @@ class ThursDayList extends StatefulWidget {
 }
 
 class _ThursDayListState extends State<ThursDayList> {
+  var quantity = 1;
+  var priceItems = 0;
+
   Future<List<Widget>> createList() async {
     List<Widget> items = new List<Widget>();
     String dataString =
@@ -404,6 +622,23 @@ class _ThursDayListState extends State<ThursDayList> {
       ),
     );
   }
+
+  adjustQuality(pressed) {
+    switch (pressed) {
+      case 'plus':
+        setState(() {
+          quantity += 1;
+        });
+        return;
+      case 'minus':
+        setState(() {
+          if (quantity != 1) {
+            quantity -= 1;
+          }
+        });
+        return;
+    }
+  }
 }
 
 class FridayList extends StatefulWidget {
@@ -412,6 +647,8 @@ class FridayList extends StatefulWidget {
 }
 
 class _FridayListState extends State<FridayList> {
+  var quantity = 1;
+  var priceItems = 0;
   Future<List<Widget>> createList() async {
     List<Widget> items = new List<Widget>();
     String dataString =
@@ -521,6 +758,7 @@ class _FridayListState extends State<FridayList> {
         child: FutureBuilder(
             initialData: <Widget>[Text("")],
             future: createList(),
+
             //MenuApi.getUserMenu(context),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -538,5 +776,22 @@ class _FridayListState extends State<FridayList> {
             }),
       ),
     );
+  }
+
+  adjustQuality(pressed) {
+    switch (pressed) {
+      case 'plus':
+        setState(() {
+          quantity += 1;
+        });
+        return;
+      case 'minus':
+        setState(() {
+          if (quantity != 1) {
+            quantity -= 1;
+          }
+        });
+        return;
+    }
   }
 }

@@ -18,14 +18,40 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Colors.white),
               accountName: Image.asset("assets/hello.png"),
-              accountEmail: Text(
-                "Please Sign up here!",
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xff8D9091),
-                    fontFamily: 'Gordita',
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.normal),
+              accountEmail: Row(
+                children: [
+                  Text(
+                    "Please ",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff8D9091),
+                        fontFamily: 'Gordita',
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontSize: 12,
+                          color: Color(0xff8D9091),
+                          fontFamily: 'Gordita',
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal),
+                    ),
+                  ),
+                  Text(
+                    " here!",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff8D9091),
+                        fontFamily: 'Gordita',
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal),
+                  ),
+                ],
               ),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/profile.png'),
