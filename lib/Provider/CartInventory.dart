@@ -100,19 +100,19 @@ class CartInventory extends ChangeNotifier {
   //   return total;
   // }
 
-  // removeItemFromCart(ProductItems productItems) {
-  //   ProductItems found = _items.firstWhere(
-  //       (element) => element.id == productItems.id,
-  //       orElse: () => null);
-  //   if (found != null && found.quantity == 1) {
-  //     productItems.quantity = 1;
-  //     _items.remove(productItems);
-  //   }
-  //   if (found != null && found.quantity > 1) {
-  //     found.quantity -= 1;
-  //   }
-  //   notifyListeners();
-  // }
+  removeItemFromCart(ProductItems productItems) {
+    ProductItems found = _items.firstWhere(
+        (element) => element.id == productItems.id,
+        orElse: () => null);
+    if (found != null && found.quantity == 1) {
+      productItems.quantity = 1;
+      _items.remove(productItems);
+    }
+    if (found != null && found.quantity > 1) {
+      found.quantity -= 1;
+    }
+    notifyListeners();
+  }
 
   getCartPrice(ProductItems productItems) {
     // setActiveItem(productItems);

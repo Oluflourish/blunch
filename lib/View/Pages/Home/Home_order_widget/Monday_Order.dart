@@ -201,7 +201,7 @@ class _OrderListState extends State<OrderList> {
                           backgroundColor: Color(0xffFFFFFF),
                           onPressed: () {
                             ProductItems product = shop.activeitem;
-                            shop.removeItem(product);
+                            shop.removeItemFromCart(product);
                           },
                           child: Icon(
                             Icons.remove,
@@ -237,7 +237,7 @@ class _OrderListState extends State<OrderList> {
                         backgroundColor: Color(0xffFFFFFF),
                         onPressed: () {
                           ProductItems product = shop.activeitem;
-                          shop.addItem(product);
+                          shop.addItemToCart(product);
                         },
                         child: Icon(
                           Icons.add,
