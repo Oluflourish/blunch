@@ -1,3 +1,4 @@
+import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/Provider/WednesdayList.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ class Wednesday_Order extends StatefulWidget {
 class _Wednesday_OrderState extends State<Wednesday_Order> {
   @override
   Widget build(BuildContext context) {
-    var wednesday = Provider.of<DayThree>(context);
+    final wednesday = Provider.of<DayThree>(context);
+    final cartItems = Provider.of<CartProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () {},
       child: ListView.builder(
@@ -21,7 +24,7 @@ class _Wednesday_OrderState extends State<Wednesday_Order> {
           return GestureDetector(
             onTap: () async {
               wednesday.setActiveItem(wednesday.daythreeitem[i]);
-              buildShowModalBottomSheet(context, wednesday);
+              buildShowModalBottomSheet(context, wednesday, cartItems);
             },
             child: Padding(
               padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -121,7 +124,8 @@ class _Wednesday_OrderState extends State<Wednesday_Order> {
   }
 }
 
-Future buildShowModalBottomSheet(BuildContext context, DayThree shop) {
+Future buildShowModalBottomSheet(
+    BuildContext context, DayThree shop, cartItems) {
   return showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -132,7 +136,6 @@ Future buildShowModalBottomSheet(BuildContext context, DayThree shop) {
       builder: (
         context,
       ) {
-        num quantity = 1;
         return Container(
           padding: EdgeInsets.all(24),
           height: MediaQuery.of(context).size.height - 150,
@@ -304,7 +307,10 @@ Future buildShowModalBottomSheet(BuildContext context, DayThree shop) {
                       color: Color(0xfff7B0304),
                       textColor: Colors.white,
                       onPressed: () {
-                        //Navigator.pop(context);
+                        Navigator.pop(context);
+                        ProductItems product = shop.activeitem;
+                        cartItems.addItems(product.id, product.name,
+                            product.price, product.image);
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),

@@ -24,22 +24,16 @@ class CartInventory extends ChangeNotifier {
           price: 1000),
       ProductItems(
           id: 3,
-          image: ("assets/egg_mayo.png"),
-          name: "Egg & Mayo Sandwich",
-          quantity: 1,
-          price: 1000),
-      ProductItems(
-          id: 4,
           image: ("assets/suya_stirfryy.png"),
           name: "Suya Stir Fry Noodles + Extra Suya",
           quantity: 1,
           price: 1500),
       ProductItems(
-          id: 5,
-          image: ("assets/egg_mayo.png"),
-          name: "Egg & Mayo Sandwich",
+          id: 4,
+          image: ("assets/zobo.png"),
+          name: "Zobo",
           quantity: 1,
-          price: 1500),
+          price: 200),
     ];
     notifyListeners();
   }
@@ -79,6 +73,12 @@ class CartInventory extends ChangeNotifier {
     notifyListeners();
   }
 
+  int get totalOrder {
+    var counter = 1;
+    counter = activeitem.quantity * counter;
+    return counter;
+  }
+
   removeItem(ProductItems productItems) {
     ProductItems found = _items.firstWhere(
         (element) => element.id == productItems.id,
@@ -90,6 +90,10 @@ class CartInventory extends ChangeNotifier {
       found.quantity -= 1;
     }
     notifyListeners();
+  }
+
+  int quantity(int id) {
+    return cart[id].quantity;
   }
 
   //  int getCartQuantityTotal() {
@@ -120,6 +124,11 @@ class CartInventory extends ChangeNotifier {
     total = _activeitem.quantity * _activeitem.price;
 
     return total;
+  }
+
+  int get selectCartPrice {
+    var price = activeitem.price * activeitem.quantity;
+    return price;
   }
 
   getCartQuantity(ProductItems productItems) {

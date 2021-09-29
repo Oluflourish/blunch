@@ -11,25 +11,25 @@ class DayFour extends ChangeNotifier {
   DayFour() {
     _items = [
       ProductItems(
-          id: 1,
+          id: 14,
           image: ("assets/chicken_stirfry.png"),
           name: "Chicken Stir Fry Noodles",
           quantity: 1,
           price: 1500),
       ProductItems(
-          id: 2,
+          id: 15,
           image: ("assets/pancake.png"),
           name: "6 Pancakes + 2 Sausages + Syrup",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 3,
+          id: 16,
           image: ("assets/suya_stirfryy.png"),
           name: "Suya Stir Fry Noodles + Extra Suya",
           quantity: 1,
           price: 1200),
       ProductItems(
-          id: 4,
+          id: 17,
           image: ("assets/zobo.png"),
           name: "Zobo",
           quantity: 1,

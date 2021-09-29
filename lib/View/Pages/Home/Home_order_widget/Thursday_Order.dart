@@ -1,3 +1,4 @@
+import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/Provider/ThursdayList.dart';
 import 'package:blunch/models/item.dart';
 
@@ -13,7 +14,9 @@ class _ThursdayOrderState extends State<ThursdayOrder> {
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    var thursday = Provider.of<DayFour>(context);
+    final thursday = Provider.of<DayFour>(context);
+    final cartItems = Provider.of<CartProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () {},
       child: ListView.builder(
@@ -23,10 +26,7 @@ class _ThursdayOrderState extends State<ThursdayOrder> {
           return GestureDetector(
             onTap: () async {
               thursday.setActiveItem(thursday.dayfouritem[i]);
-              buildShowModalBottomSheet(
-                context,
-                thursday,
-              );
+              buildShowModalBottomSheet(context, thursday, cartItems);
             },
             child: Padding(
               padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -125,7 +125,8 @@ class _ThursdayOrderState extends State<ThursdayOrder> {
   }
 }
 
-Future buildShowModalBottomSheet(BuildContext context, DayFour shop) {
+Future buildShowModalBottomSheet(
+    BuildContext context, DayFour shop, cartItems) {
   return showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -306,7 +307,12 @@ Future buildShowModalBottomSheet(BuildContext context, DayFour shop) {
                       ),
                       color: Color(0xfff7B0304),
                       textColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ProductItems product = shop.activeitem;
+                        cartItems.addItems(product.id, product.name,
+                            product.price, product.image);
+                      },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),

@@ -1,3 +1,4 @@
+import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/Provider/FridayList.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ class FridayOrder extends StatefulWidget {
 class _FridayOrderState extends State<FridayOrder> {
   @override
   Widget build(BuildContext context) {
-    var friday = Provider.of<DayFive>(context);
+    final friday = Provider.of<DayFive>(context);
+    final cartItems = Provider.of<CartProvider>(context, listen: false);
+    // ProductItems product = friday.activeitem;
     return GestureDetector(
       onTap: () {},
       child: ListView.builder(
@@ -21,7 +24,7 @@ class _FridayOrderState extends State<FridayOrder> {
           return GestureDetector(
             onTap: () async {
               friday.setActiveItem(friday.dayfiveitem[i]);
-              buildShowModalBottomSheet(context, friday);
+              buildShowModalBottomSheet(context, friday, cartItems);
             },
             child: Padding(
               padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -120,7 +123,8 @@ class _FridayOrderState extends State<FridayOrder> {
   }
 }
 
-Future buildShowModalBottomSheet(BuildContext context, DayFive shop) {
+Future buildShowModalBottomSheet(
+    BuildContext context, DayFive shop, cartItems) {
   return showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -299,7 +303,10 @@ Future buildShowModalBottomSheet(BuildContext context, DayFive shop) {
                       color: Color(0xfff7B0304),
                       textColor: Colors.white,
                       onPressed: () {
-                        //Navigator.pop(context);
+                        Navigator.pop(context);
+                        ProductItems product = shop.activeitem;
+                        cartItems.addItems(product.id, product.name,
+                            product.price, product.image);
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),

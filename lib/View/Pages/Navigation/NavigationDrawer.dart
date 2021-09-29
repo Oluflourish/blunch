@@ -30,7 +30,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         fontStyle: FontStyle.normal),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/sign_up');
+                    },
                     child: Text(
                       "Sign up",
                       style: TextStyle(

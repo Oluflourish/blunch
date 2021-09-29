@@ -1,3 +1,4 @@
+import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/Provider/Tuesdayinventory.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,9 @@ class _TuesdayOrderState extends State<TuesdayOrder> {
   Widget build(BuildContext context) {
     var tuesday = Provider.of<DayTwo>(context);
     ProductItems product = tuesday.activeitem;
-    //final _scaffoldkey = GlobalKey<ScaffoldState>();
+    final cartItems = Provider.of<CartProvider>(context, listen: false);
+    // ProductItems product = tuesday.activeitem;
+
     return Scaffold(
         body: GestureDetector(
       onTap: () {},
@@ -23,7 +26,7 @@ class _TuesdayOrderState extends State<TuesdayOrder> {
           return GestureDetector(
             onTap: () async {
               tuesday.setActiveItem(tuesday.dayitem[i]);
-              buildShowModalBottomSheet(context, tuesday, product);
+              buildShowModalBottomSheet(context, tuesday, product, cartItems);
             },
             child: Padding(
               padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -121,7 +124,8 @@ class _TuesdayOrderState extends State<TuesdayOrder> {
     ));
   }
 
-  Future buildShowModalBottomSheet(BuildContext context, DayTwo shop, product) {
+  Future buildShowModalBottomSheet(
+      BuildContext context, DayTwo shop, product, cartItems) {
     return showModalBottomSheet(
         isDismissible: false,
         isScrollControlled: true,
@@ -305,6 +309,9 @@ class _TuesdayOrderState extends State<TuesdayOrder> {
                         textColor: Colors.white,
                         onPressed: () {
                           Navigator.pop(context);
+                          ProductItems product = shop.activeitem;
+                          cartItems.addItems(product.id, product.name,
+                              product.price, product.image);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),

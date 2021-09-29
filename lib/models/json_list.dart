@@ -33,3 +33,33 @@
 //         name: json['name'], price: json['price'], photo: json['photo']);
 //   }
 // }
+
+import 'package:blunch/View/Pages/Location/Select_Location.dart';
+import 'package:flutter/material.dart';
+
+class LocationResponse {
+  final String status;
+  List<Location> location;
+
+  LocationResponse({this.location, this.status});
+
+  factory LocationResponse.fromJson(Map<String, dynamic> json) {
+    var list = json['locations'] as List;
+    List<Location> locationList =
+        list.map((e) => Location.fromJson(e)).toList();
+    return LocationResponse(location: locationList, status: json['status']);
+  }
+}
+
+class Location {
+  int id;
+  String name;
+  Location({
+    @required this.id,
+    @required this.name,
+  });
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(id: json['id'], name: json['name']);
+  }
+}

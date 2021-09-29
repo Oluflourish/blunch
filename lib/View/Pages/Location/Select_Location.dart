@@ -1,7 +1,6 @@
-import 'package:blunch/Model/location_model/user_location.dart';
 import 'package:blunch/Model/location_model/user_locationApi.dart';
+import 'package:blunch/Services/location_Service.dart';
 import 'package:blunch/View/Pages/Home/HomeScreen.dart';
-import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -11,7 +10,11 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  //final listItem = ['bodija', 'mokola', 'sango', 'UI'];
+  final locationController = TextEditingController();
+  final formKey = new GlobalKey<FormState>();
+  String selectedLocation;
+  final _dataService = LocationService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +22,10 @@ class _LocationScreenState extends State<LocationScreen> {
         child: Padding(
           padding: const EdgeInsets.only(left: 24.0, top: 60),
           child: SafeArea(
-            child: ListView(
-              children: [
-                Column(
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -32,6 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           fontWeight: FontWeight.w700,
                           fontStyle: FontStyle.normal),
                     ),
+                    // ElevatedButton(onPressed: _search, child: Text("")),
                     SizedBox(
                       height: 12,
                     ),
@@ -52,39 +57,42 @@ class _LocationScreenState extends State<LocationScreen> {
                       child: Container(
                           padding: EdgeInsets.only(left: 20, right: 20),
                           //Location Search
-                          child: Text('Enter your location')
-                          //DropDownFormField()
-                          //  TypeAheadField<User>(
-                          //   hideOnLoading: true,
-                          //   hideKeyboard: true,
-                          //   textFieldConfiguration: TextFieldConfiguration(
-                          //       decoration: InputDecoration(
-                          //     hintText: ('Search for Location'),
-                          //     hintStyle: TextStyle(
-                          //         color: Color(0xff828282),
-                          //         fontSize: 14,
-                          //         fontFamily: 'Gordita',
-                          //         fontWeight: FontWeight.w500,
-                          //         fontStyle: FontStyle.normal),
-                          //     suffixIcon: Icon(Icons.keyboard_arrow_down),
-                          //     border: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular((10))),
-                          //   )),
-                          //   //   hideSuggestionsOnKeyboardHide: true,
-                          //   suggestionsCallback: UserApi.getUserSugestion,
-                          //   itemBuilder: (context, User suggestion) {
-                          //     final user = suggestion;
-                          //     return ListTile(
-                          //       title: Text(user.name),
-                          //     );
-                          //   },
-                          //   onSuggestionSelected: (User suggestion) {},
-                          // ),
-                          ),
+                          child:
+                        
+                              TypeAheadFormField<String>(
+                            textFieldConfiguration: TextFieldConfiguration(
+                                controller: locationController,
+                                decoration: InputDecoration(
+                                  hintText: ('Search for Location'),
+                                  hintStyle: TextStyle(
+                                      color: Color(0xff828282),
+                                      fontSize: 14,
+                                      fontFamily: 'Gordita',
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FontStyle.normal),
+                                  suffixIcon: Icon(Icons.keyboard_arrow_down),
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular((10))),
+                                )),
+                            validator: (value) => value != null && value.isEmpty
+                                ? "Please enter a location"
+                                : null,
+                            onSaved: (value) => selectedLocation = value,
+                            suggestionsCallback: UserApi.getSugestion,
+                            itemBuilder: (context, String suggestion) {
+                              return ListTile(
+                                title: Text(suggestion),
+                              );
+                            },
+                            onSuggestionSelected: (String suggestion) =>
+                                locationController.text = suggestion,
+                          )),
                     ),
                     SizedBox(
                       height: 153,
                     ),
+                 
                     Padding(
                       padding: const EdgeInsets.only(right: 24),
                       child: Container(
@@ -104,11 +112,15 @@ class _LocationScreenState extends State<LocationScreen> {
                           color: Color(0xfff7B0304),
                           textColor: Colors.white,
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
-                                ));
+                            final form = formKey.currentState;
+                            if (form.validate()) {
+                              form.save();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ));
+                            }
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -117,11 +129,79 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  void _search() async {
+    final response = await _dataService.makeRequesttoAPi(location.toString());
+    print(response.location[1].name);
+    print(response.status);
+    print(response.location[60].name);
+  }
 }
+
+// class buildLocation extends StatelessWidget {
+//   const buildLocation({
+//     Key key,
+//     @required this.locationController,
+//   }) : super(key: key);
+
+//   final TextEditingController locationController;
+
+//   @override
+//   Widget build(BuildContext context) {
+// String selectedLocation;
+////  String selectedLocation;
+// return TypeAheadFormField<String>(
+//   textFieldConfiguration: TextFieldConfiguration(
+//       controller: locationController,
+//       decoration: InputDecoration(
+//         hintText: ('Search for Location'),
+//         hintStyle: TextStyle(
+//             color: Color(0xff828282),
+//             fontSize: 14,
+//             fontFamily: 'Gordita',
+//             fontWeight: FontWeight.w500,
+//             fontStyle: FontStyle.normal),
+//         suffixIcon: Icon(Icons.keyboard_arrow_down),
+//         border:
+//             OutlineInputBorder(borderRadius: BorderRadius.circular((10))),
+//       )),
+//   validator: (value) =>
+//       value != null && value.isEmpty ? "Please enter a location" : null,
+//   onSaved: (value) => selectedLocation = value,
+//   suggestionsCallback: UserApi.getSugestion,
+//   itemBuilder: (context, String suggestion) {
+//     return ListTile(
+//       title: Text(suggestion),
+//     );
+//   },
+//   onSuggestionSelected: (String suggestion) =>
+//       locationController.text = suggestion,
+// );
+//}
+//}
+
+final location = [
+  "UI (University of Ibadan)",
+  "Agbowo",
+  "Bodija",
+  "Ikolaba",
+  "UCH",
+  // "Idi-Ape",
+  // "Samonda",
+  // "Sanyo",
+  // "Sango",
+  // "General gas - Akobo",
+  // "Ikolaba",
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();

@@ -11,31 +11,31 @@ class DayTwo extends ChangeNotifier {
   DayTwo() {
     _items = [
       ProductItems(
-          id: 1,
+          id: 5,
           image: "assets/chicken_stirfry.png",
           name: "Chicken Stir Fry Noodles",
           quantity: 1,
           price: 1500),
       ProductItems(
-          id: 2,
+          id: 6,
           image: ("assets/pancake.png"),
           name: "6 Pancakes + 2 Sausages + Syrup",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 3,
+          id: 7,
           image: ("assets/suya_stirfry.png"),
           name: "Suya Stir Fry Noodles",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 4,
+          id: 8,
           image: ("assets/suya_stirfryy.png"),
           name: "Suya Stir Fry Noodles + Extra Suya",
           quantity: 1,
           price: 1200),
       ProductItems(
-          id: 5,
+          id: 9,
           image: ("assets/zobo.png"),
           name: "Zobo",
           quantity: 1,

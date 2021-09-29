@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:blunch/Model/Profile_model/Profile_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

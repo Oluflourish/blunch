@@ -11,25 +11,25 @@ class DayThree extends ChangeNotifier {
   DayThree() {
     _items = [
       ProductItems(
-          id: 1,
+          id: 10,
           image: ("assets/suya_stirfry.png"),
           name: "Suya Stir Fry Noodles",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 2,
+          id: 11,
           image: ("assets/chicken_sandwich.png"),
           name: "Chicken Sandwich",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 3,
+          id: 12,
           image: ("assets/suya_stirfryy.png"),
           name: "Suya Stir Fry Noodles + Extra Suya",
           quantity: 1,
           price: 1200),
       ProductItems(
-          id: 4,
+          id: 13,
           image: ("assets/zobo.png"),
           name: "Zobo",
           quantity: 1,

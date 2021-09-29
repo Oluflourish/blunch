@@ -1,43 +1,63 @@
 import 'package:blunch/Model/Profile_model/profile_model.dart';
+import 'package:blunch/Provider/ProfileProvider.dart';
 import 'package:blunch/View/Util/Address/Add_address.dart';
 import 'package:flutter/material.dart';
 import 'package:blunch/Model/Profile_model/Profile_util.dart';
+import 'package:provider/provider.dart';
 
-class ProfileData extends StatefulWidget {
+class EditProfile extends StatefulWidget {
   final String text;
-  const ProfileData({
+  const EditProfile({
     Key key,
     this.text,
   }) : super(key: key);
   @override
-  _ProfileDataState createState() => _ProfileDataState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
-class _ProfileDataState extends State<ProfileData> {
+class _EditProfileState extends State<EditProfile> {
   var user = Profile_util.myUser;
   final text = Profile_util.myUser;
-  TextEditingController controller;
+  TextEditingController displaycontroller = new TextEditingController();
+  TextEditingController firstnamecontroller = new TextEditingController();
+  TextEditingController lastnamecontroller = new TextEditingController();
+  TextEditingController addresscontroller = new TextEditingController();
+  TextEditingController phonecontroller = new TextEditingController();
+  TextEditingController emailcontroller = new TextEditingController();
 
-  @override
-  void initState() {
-    controller = TextEditingController();
-    super.initState();
-  }
+  //TextEditingController controller;
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void initState() {
+  //   controller = TextEditingController();
+  //   super.initState();
+  // }
+
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
 
   //_ProfileDataState(this.controller);
 
   void onSaveAddress() {
     print('saved');
+    ProfileMode profileMode = ProfileMode(
+        first_name: firstnamecontroller.text,
+        last_name: lastnamecontroller.text,
+        display_name: displaycontroller.text,
+        email: emailcontroller.text,
+        phone: phonecontroller.text,
+        address: addresscontroller.text);
+
+    Provider.of<ProfileProvider>(context).addProfile(profileMode);
+    Navigator.of(context).pop(true);
   }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileProvider>(context).initialState();
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -122,49 +142,126 @@ class _ProfileDataState extends State<ProfileData> {
                       SizedBox(
                         height: 4,
                       ),
-                      ProfileWidget(
-                        onChanged: (display) {},
-                        label: "Display name",
-                        text: user.display_name,
+                      TextFormField(
+                        controller: displaycontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                       ),
                       SizedBox(
                         height: 24,
                       ),
-                      ProfileWidget(
-                        label: "First Name",
-                        onChanged: (first_name) =>
-                            user = user.copy(first_name: first_name),
-                        text: user.first_name,
+                      TextFormField(
+                        controller: firstnamecontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                       ),
                       SizedBox(
                         height: 24,
                       ),
-                      ProfileWidget(
-                          text: user.last_name,
-                          onChanged: (last_name) =>
-                              user = user.copy(last_name: last_name),
-                          label: "Last name"),
+                      TextFormField(
+                        controller: lastnamecontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
                       SizedBox(
                         height: 24,
                       ),
-                      ProfileWidget(
-                          text: user.phone,
-                          onChanged: (phone) => user = user.copy(phone: phone),
-                          label: "Phone number"),
+                      TextFormField(
+                        controller: addresscontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
                       SizedBox(
                         height: 24,
                       ),
-                      ProfileWidget(
-                          onChanged: (email) => user.copy(email: email),
-                          text: user.email,
-                          label: "Email Address"),
+                      TextFormField(
+                        controller: emailcontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
                       SizedBox(
                         height: 24,
                       ),
-                      ProfileWidget(
-                          onChanged: (address) => user.copy(address: address),
-                          text: user.address,
-                          label: "Address"),
+                      TextFormField(
+                        controller: phonecontroller,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff14142B),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  //color:
+                                  ),
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
 
                       SizedBox(
                         height: 25,
@@ -254,21 +351,27 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-  TextEditingController controller;
+  //TextEditingController controller;
+  TextEditingController displaycontroller = new TextEditingController();
+  TextEditingController firstnamecontroller = new TextEditingController();
+  TextEditingController lastnamecontroller = new TextEditingController();
+  TextEditingController addresscontroller = new TextEditingController();
+  TextEditingController phonecontroller = new TextEditingController();
+  TextEditingController emailcontroller = new TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    controller = TextEditingController(text: widget.text);
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   controller = TextEditingController(text: widget.text);
+  // }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    controller.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   controller.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -290,7 +393,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           ),
           TextFormField(
             onChanged: widget.onChanged,
-            controller: controller,
+            // controller: controller,
             keyboardType: TextInputType.name,
             decoration: InputDecoration(
               hintStyle: TextStyle(

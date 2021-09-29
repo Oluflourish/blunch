@@ -1,4 +1,5 @@
 import 'package:blunch/Provider/CartInventory.dart';
+import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,13 @@ class _OrderListState extends State<OrderList> {
   final _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    var shop = Provider.of<CartInventory>(context);
+    final shop = Provider.of<CartInventory>(context);
+    final cartItems = Provider.of<CartProvider>(
+      context,
+      //listen: false
+    );
     ProductItems product = shop.activeitem;
+    //CartItems myProduct = cartItems.activeitem;
 
     return Scaffold(
         key: _scaffoldkey,
@@ -26,7 +32,7 @@ class _OrderListState extends State<OrderList> {
               return GestureDetector(
                 onTap: () async {
                   shop.setActiveItem(shop.item[i]);
-                  buildShowModalBottomSheet(context, shop, product);
+                  buildShowModalBottomSheet(context, shop, product, cartItems);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -125,7 +131,7 @@ class _OrderListState extends State<OrderList> {
   }
 
   Future buildShowModalBottomSheet(
-      BuildContext context, CartInventory shop, product) {
+      BuildContext context, CartInventory shop, product, cartItems) {
     return showModalBottomSheet(
         isDismissible: false,
         isScrollControlled: true,
@@ -213,8 +219,9 @@ class _OrderListState extends State<OrderList> {
                       padding: const EdgeInsets.all(14.0),
                       child: Consumer<CartInventory>(
                         builder: (context, mycart, child) => Text(
-                          (mycart.activeitem.quantity * mycart.counter)
-                              .toString(),
+                          // (mycart.activeitem.quantity * mycart.counter)
+                          //     .toString(),
+                          '${mycart.totalOrder}',
                           style: TextStyle(
                               fontSize: 16,
                               color: Color(0xff1A1A1A),
@@ -292,10 +299,10 @@ class _OrderListState extends State<OrderList> {
                       child: RaisedButton(
                         child: Consumer<CartInventory>(
                           builder: (context, mycart, child) => Text(
-                            "Add for NGN " +
-                                (shop.activeitem.price *
-                                        shop.activeitem.quantity)
-                                    .toString(),
+                            "Add for NGN " + '${shop.selectCartPrice}',
+                            //  (shop.activeitem.price *
+                            //     shop.activeitem.quantity)
+                            //   .toString(),
                             //shop.getQuantity(product).toString(),
                             style: TextStyle(
                                 fontSize: 16,
@@ -309,7 +316,19 @@ class _OrderListState extends State<OrderList> {
                         textColor: Colors.white,
                         onPressed: () {
                           Navigator.pop(context);
-                          _showCart(context, shop, product);
+                          ProductItems product = shop.activeitem;
+                          cartItems.getcarttotaltest(
+                              product.quantity,
+                              product.id,
+                              product.name,
+                              product.price,
+                              product.image);
+                          cartItems.addItems(
+                              //product.quantity,
+                              product.id,
+                              product.name,
+                              product.price,
+                              product.image);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -323,57 +342,66 @@ class _OrderListState extends State<OrderList> {
         });
   }
 
-  Widget _showCart(BuildContext context, CartInventory shop, product) {
-    _scaffoldkey.currentState.showBottomSheet(
-      (context) => Container(
-        decoration: BoxDecoration(
-            color: Color(0xff1A1A1A),
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        height: 72,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  top: 24,
-                  bottom: 24,
-                ),
-                child: Consumer<CartInventory>(
-                  builder: (context, mycart, child) => Text(
-                    (((shop.getCartQuantity(shop.activeitem))).toString() +
-                        " meal" +
-                        " - NGN " +
-                        // (mycart.activeitem.price)
-                        (mycart.getCartPrice(mycart.activeitem)).toString()),
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontFamily: 'Gordita',
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal),
-                  ),
-                ),
-              ),
-              Spacer(),
-              Container(
-                height: 48,
-                width: 108,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/cart');
-                  },
-                  color: Colors.white,
-                  child: Text("View Cart"),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _showCart(
+  //     BuildContext context, CartInventory shop, product, cartItems) {
+  //   _scaffoldkey.currentState.showBottomSheet(
+  // (context) => Container(
+  //   decoration: BoxDecoration(
+  //       color: Color(0xff1A1A1A),
+  //       borderRadius: BorderRadius.all(Radius.circular(20))),
+  //   height: 72,
+  //   child: Padding(
+  //     padding: const EdgeInsets.only(right: 16.0),
+  //     child: Row(
+  //       children: [
+  //         Padding(
+  //           padding: const EdgeInsets.only(
+  //             left: 16.0,
+  //             top: 24,
+  //             bottom: 24,
+  //           ),
+  //           child: Consumer<CartInventory>(
+  //             builder: (context, mycart, child) => Text(
+  //               //  (((shop.getCartQuantity(shop.activeitem))).toString()
+  //               (
+  //                   // cartItems.itemsCount.toString()
+  //                   mycart.activeitem.quantity.toString() +
+  //                       " meal" +
+  //                       " - NGN "
+  //               //+
+  //               //   cartItems.itemsCount.toString()
+  //               // (mycart.activeitem.price)
+  //               //(mycart.getCartPrice(mycart.activeitem)).toString()
+  //               ),
+  //               style: TextStyle(
+  //                   fontSize: 16,
+  //                   color: Colors.white,
+  //                   fontFamily: 'Gordita',
+  //                   fontWeight: FontWeight.w400,
+  //                   fontStyle: FontStyle.normal),
+  //             ),
+  //           ),
+  //         ),
+  //         Spacer(),
+  //         Container(
+  //           height: 48,
+  //           width: 108,
+  //           child: RaisedButton(
+  //             shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(10)),
+  //             onPressed: () {
+  //               Navigator.pushNamed(context, '/cart');
+  //               cartItems.addItems(product.id, product.price, product.name,
+  //                   product.image, product.quantity);
+  //             },
+  //             color: Colors.white,
+  //             child: Text("View Cart"),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   ),
+  // ),
+  //  );
+  // }
 }
