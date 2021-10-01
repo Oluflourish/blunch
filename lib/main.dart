@@ -6,11 +6,11 @@ import 'package:blunch/Provider/ProfileProvider.dart';
 import 'package:blunch/Provider/ThursdayList.dart';
 import 'package:blunch/Provider/Tuesdayinventory.dart';
 import 'package:blunch/Provider/WednesdayList.dart';
+//import 'package:blunch/View/Pages/Component/SuccesPage.dart';
 import 'package:blunch/View/Pages/Home/HomeScreen.dart';
 import 'package:blunch/View/Pages/Navigation/Drawer_Order.dart';
 import 'package:blunch/View/Pages/Navigation/Drawer_notification.dart';
 import 'package:blunch/View/Pages/User/sign_in.dart';
-import 'package:blunch/View/Pages/Widgets/Cart.dart';
 import 'package:blunch/View/Util/Profile/Drawer_profile.dart';
 import 'package:blunch/View/Pages/Location/Select_Location.dart';
 import 'package:blunch/View/Pages/Home/SplashScreen.dart';
@@ -20,10 +20,10 @@ import 'package:blunch/View/Util/Address/Address_book.dart';
 import 'package:blunch/View/Util/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'View/Pages/Component/Cart.dart';
+import 'View/Pages/Component/ForgetPassword.dart';
+import 'View/Pages/Component/ResetPassword.dart';
 import 'View/Pages/User/sign_up.dart';
-import 'View/Pages/Widgets/ForgetPassword.dart';
-import 'View/Pages/Widgets/ResetPassword.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,6 +98,7 @@ class MyApp extends StatelessWidget {
           '/reset_password': (context) => ResetPassword(),
           '/sign_up': (context) => SignUp(),
           '/sign_in': (context) => SignIn(),
+          //  '/success_page': (context) => SuccessPage(),
         },
       ),
     );
