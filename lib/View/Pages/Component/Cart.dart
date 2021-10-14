@@ -12,7 +12,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
-    final shop = Provider.of<CartProvider>(context, listen: false);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     // ProductItems productItems = shop.activeitem;
     return Scaffold(
         backgroundColor: Colors.white,
@@ -37,20 +37,13 @@ class _CartScreenState extends State<CartScreen> {
             Expanded(
               //flex: 5,
               child: ListView.builder(
-                  //physics: BouncingScrollPhysics,
-                  shrinkWrap: true,
-                  itemCount: shop.items.length,
-                  itemBuilder: (context, index) =>
-                      //cart card
-                      CartUtil(
-                          cart: shop.items[index],
-                          price: shop.items.values.toList()[index].price,
-                          image: shop.items.values.toList()[index].image,
-                          name: shop.items.values.toList()[index].name,
-                          //delete operation
-                          productId: shop.items.keys.toList()[index].toString(),
-                          quantity:
-                              shop.items.values.toList()[index].quantity)),
+                //physics: BouncingScrollPhysics,
+                shrinkWrap: true,
+                itemCount: cartProvider.cartItems.length,
+                itemBuilder: (context, index) =>
+                    //cart card
+                    CartUtil(cart: cartProvider.cartItems[index]),
+              ),
             ),
 
             //Spacer(),
@@ -66,8 +59,8 @@ class _CartScreenState extends State<CartScreen> {
                         builder: (context, mycart, child) => Text(
                           "Sub-total (" +
                               // shop.itemsCount.toString()
-                              '${shop.itemsCount} ' +
-                              "${shop.meals}" +
+                              '${cartProvider.cartItems.length} ' +
+                              "${cartProvider.meals}" +
                               ')',
                           style: TextStyle(
                               fontSize: 16,

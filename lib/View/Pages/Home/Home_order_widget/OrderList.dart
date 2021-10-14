@@ -1,11 +1,14 @@
 import 'package:blunch/Provider/CartInventory.dart';
 import 'package:blunch/Provider/CartProvider.dart';
+import 'package:blunch/models/cart_item.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OrderList extends StatefulWidget {
-  const OrderList({Key key}) : super(key: key);
+  const OrderList({Key key, @required this.day}) : super(key: key);
+
+  final String day;
   @override
   _OrderListState createState() => _OrderListState();
 }
@@ -13,14 +16,19 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
   final _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final shop = Provider.of<CartInventory>(context);
-    final cartItems = Provider.of<CartProvider>(
-      context,
-      //listen: false
-    );
+    final cartItems = Provider.of<CartProvider>(context);
+
+    print(widget.day);
     ProductItems product = shop.activeitem;
-    ProductItems productItems;
+    shop.loadItems(widget.day);
 
     return Scaffold(
         key: _scaffoldkey,
@@ -42,7 +50,7 @@ class _OrderListState extends State<OrderList> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 20, top: 0),
                   child: Container(
-                    height: 120,
+                    // height: 120,
                     width: 327,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -139,7 +147,7 @@ class _OrderListState extends State<OrderList> {
     BuildContext context,
     CartInventory shop,
     product,
-    cartItems,
+    CartProvider cartItems,
   ) {
     return showModalBottomSheet(
         isDismissible: false,
@@ -155,9 +163,8 @@ class _OrderListState extends State<OrderList> {
           // num quantity = 1;
           return Container(
             padding: EdgeInsets.all(24),
-            height: MediaQuery.of(context).size.height - 150,
             child: Column(
-              // mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,9 +356,15 @@ class _OrderListState extends State<OrderList> {
                           ProductItems product = shop.activeitem;
                           //shop.activeitem.quantity
                           //send quantity to cart
+                          CartItems cartItem = CartItems(
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            quantity: product.quantity,
+                            image: product.image,
+                          );
 
-                          cartItems.addItems(product.quantity, product.id,
-                              product.name, product.price, product.image);
+                          cartItems.addToCart(cartItem);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),

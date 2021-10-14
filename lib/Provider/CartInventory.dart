@@ -1,3 +1,4 @@
+import 'package:blunch/Model/Utils/data_inventory.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 
@@ -8,36 +9,6 @@ class CartInventory extends ChangeNotifier {
   int counter = 1;
   ProductItems _activeitem = null;
 
-  CartInventory() {
-    _items = [
-      ProductItems(
-          id: 0,
-          image: "assets/egg_mayo.png",
-          name: "Egg & Mayo Sandwich",
-          quantity: 1,
-          price: 1500),
-      ProductItems(
-          id: 1,
-          image: ("assets/suya_stirfry.png"),
-          name: "Suya Stir Fry Noodles",
-          quantity: 1,
-          price: 1000),
-      ProductItems(
-          id: 2,
-          image: ("assets/suya_stirfryy.png"),
-          name: "Suya Stir Fry Noodles + Extra Suya",
-          quantity: 1,
-          price: 1500),
-      ProductItems(
-          id: 3,
-          image: ("assets/zobo.png"),
-          name: "Zobo",
-          quantity: 1,
-          price: 200),
-    ];
-    notifyListeners();
-  }
-
   List<ProductItems> get item => _items;
 
   List<ProductItems> get cart => _cart;
@@ -46,6 +17,15 @@ class CartInventory extends ChangeNotifier {
 
   setActiveItem(ProductItems productItems) {
     _activeitem = productItems;
+  }
+
+  loadItems(String day) {
+    _items = [];
+    for (var productItem in productItems) {
+      if (productItem.day == day) {
+        _items.add(productItem);
+      }
+    }
   }
 
   // addItemToCart(ProductItems productItems) {
@@ -102,7 +82,7 @@ class CartInventory extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteItems(String productId) {
+  void deleteItems(int productId) {
     _items.remove(productId);
     //_cartItems.remove(productId);
     notifyListeners();
@@ -157,4 +137,70 @@ class CartInventory extends ChangeNotifier {
 
     return p;
   }
+
+  List<ProductItems> productItems = [
+    ProductItems(
+        day: "monday",
+        id: 0,
+        image: "assets/egg_mayo.png",
+        name: "Egg & Mayo Sandwich",
+        quantity: 1,
+        price: 1500),
+    ProductItems(
+        day: "monday",
+        id: 1,
+        image: ("assets/suya_stirfry.png"),
+        name: "Suya Stir Fry Noodles",
+        quantity: 1,
+        price: 1000),
+    ProductItems(
+        day: "monday",
+        id: 2,
+        image: ("assets/suya_stirfryy.png"),
+        name: "Suya Stir Fry Noodles + Extra Suya",
+        quantity: 1,
+        price: 1500),
+    ProductItems(
+        day: "monday",
+        id: 3,
+        image: ("assets/zobo.png"),
+        name: "Zobo",
+        quantity: 1,
+        price: 200),
+    ProductItems(
+        day: "tuesday",
+        id: 5,
+        image: "assets/chicken_stirfry.png",
+        name: "Chicken Stir Fry Noodles",
+        quantity: 1,
+        price: 1500),
+    ProductItems(
+        day: "tuesday",
+        id: 6,
+        image: ("assets/pancake.png"),
+        name: "6 Pancakes + 2 Sausages + Syrup",
+        quantity: 1,
+        price: 1000),
+    ProductItems(
+        day: "tuesday",
+        id: 7,
+        image: ("assets/suya_stirfry.png"),
+        name: "Suya Stir Fry Noodles",
+        quantity: 1,
+        price: 1000),
+    ProductItems(
+        day: "tuesday",
+        id: 8,
+        image: ("assets/suya_stirfryy.png"),
+        name: "Suya Stir Fry Noodles + Extra Suya",
+        quantity: 1,
+        price: 1200),
+    ProductItems(
+        day: "tuesday",
+        id: 9,
+        image: ("assets/zobo.png"),
+        name: "Zobo",
+        quantity: 1,
+        price: 200),
+  ];
 }

@@ -1,29 +1,21 @@
 import 'package:blunch/Provider/CartInventory.dart';
 import 'package:blunch/Provider/CartProvider.dart';
+import 'package:blunch/models/cart_item.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartUtil extends StatelessWidget {
+class CartUtil extends StatefulWidget {
   CartItems cart;
-  int id;
-  String name;
-  String productId;
-  int price;
-  int quantity;
-  String image;
 
-  CartUtil({
-    this.id,
-    this.cart,
+  CartUtil({@required this.cart});
 
-    //refactor this
-    @required this.productId,
-    @required this.name,
-    @required this.price,
-    @required this.quantity,
-    @required this.image,
-  });
+  @override
+  _CartUtilState createState() => _CartUtilState();
+}
+
+class _CartUtilState extends State<CartUtil> {
+  int itemQuantity;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +23,9 @@ class CartUtil extends StatelessWidget {
       context,
       //listen: false
     );
-    final myshop = Provider.of<CartProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
+    itemQuantity = widget.cart.quantity;
+
     return Card(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -56,10 +50,11 @@ class CartUtil extends StatelessWidget {
 
                         // backgroundColor: Color(0xffFFFFFF),
                         onPressed: () {
-                          ProductItems product = shop.activeitem;
-                          shop.removeItem(product);
-                          // shop.addQuantity(product.id);
-                          // shop.decreaseQuantity(product.id);
+                          if (itemQuantity > 1) {
+                            itemQuantity -= 1;
+                            widget.cart.quantity = itemQuantity;
+                            cartProvider.addToCart(widget.cart);
+                          }
                         },
                         icon: Icon(
                           Icons.remove,
@@ -76,17 +71,8 @@ class CartUtil extends StatelessWidget {
                         state,
                       ) =>
                           Text(
-                        // quantity.toString(),
-                        //'${shop.getOrder}',
-                        // mycart.getOrder(),
-                        // mycart.totalOrder.toString(),
-                        // mycart.activeitem.
-                        cart?.quantity.toString() ?? -1,
-                        // quantity.toString(),
-                        // mycart.totalOrder.toString(),
-                        //(mycart.activeitem.quantity * mycart.counter)
-                        // ..   .toString(),
-                        //     .toString(),
+                        itemQuantity.toString(),
+                        // widget.cart.quantity.toString(),
                         style: TextStyle(
                             fontSize: 16,
                             color: Color(0xff1A1A1A),
@@ -108,8 +94,9 @@ class CartUtil extends StatelessWidget {
                     child: IconButton(
                       color: Color(0xffFFFFFF),
                       onPressed: () {
-                        ProductItems product = shop.activeitem;
-                        shop.addItem(product);
+                        itemQuantity += 1;
+                        widget.cart.quantity = itemQuantity;
+                        cartProvider.addToCart(widget.cart);
                       },
                       icon: Icon(
                         Icons.add,
@@ -124,7 +111,7 @@ class CartUtil extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      name,
+                      widget.cart.name,
                       style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'Gordita',
@@ -139,7 +126,7 @@ class CartUtil extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      'NGN ' + price.toString(),
+                      'NGN ' + widget.cart.price.toString(),
                       // '${shop.selectCartPrice}',
                       style: TextStyle(
                           fontSize: 20,
@@ -156,7 +143,7 @@ class CartUtil extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     ProductItems product = shop.activeitem;
-                    shop.deleteItems(productId);
+                    shop.deleteItems(widget.cart.id);
                   },
                   child: Text(
                     "Remove",

@@ -1,13 +1,9 @@
 import 'package:blunch/Provider/CartInventory.dart';
 import 'package:blunch/Provider/CartProvider.dart';
-import 'package:blunch/View/Pages/Home/Home_order_widget/Monday_Order.dart';
-import 'package:blunch/View/Pages/Home/Home_order_widget/Tuesday_Order.dart';
+import 'package:blunch/View/Pages/Home/Home_order_widget/OrderList.dart';
 import 'package:blunch/View/Pages/Navigation/NavigationDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Home_order_widget/Friday_Order.dart';
-import 'Home_order_widget/Thursday_Order.dart';
-import 'Home_order_widget/Wednesday_Order.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,12 +12,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  int day;
+  final int lengthTab = 5;
+
   @override
   void initState() {
+    day = DateTime.now().weekday;
+    print("Day : $day");
+
     tabController = TabController(
-      length: 5,
+      length: lengthTab,
       vsync: this,
     );
+
+    // Adjust by subtracting 1 to compensate for Sunday
+    day -= 1;
+
+    // When day does not exist in the tabs
+    if (day > lengthTab - 1) day = 0;
+
+
+    // Change to a Monday if day is Sunday 
+    if (day < 0) day = 0;
+
+    tabController.index = day;
     super.initState();
   }
 
@@ -67,9 +81,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: ListView(
               shrinkWrap: true,
               children: [
-                SizedBox(
-                  height: 52,
-                ),
+                SizedBox(height: 52),
                 Padding(
                     padding: EdgeInsets.only(left: 21.0, right: 15),
                     child: Row(
@@ -120,112 +132,11 @@ class _HomeScreenState extends State<HomeScreen>
                       labelPadding: EdgeInsets.all(12),
                       tabs: [
                         // Order Day Tabs
-                        Tab(
-                          child: Container(
-                              width: 83,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff8D9091)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Monday",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      // color: Colors.white,
-                                      //color: Color(0xff8D9091),
-                                      fontFamily: 'Gordita',
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal),
-                                ),
-                              )),
-                        ),
-                        Tab(
-                          child: Container(
-                              width: 83,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff8D9091)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Tuesday",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      // color: Color(0xff8D9091),
-                                      fontFamily: 'Gordita',
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal),
-                                ),
-                              )),
-                        ),
-                        Tab(
-                          child: Container(
-                              width: 83,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff8D9091)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Wednesday",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      // color: Color(0xff8D9091),
-                                      fontFamily: 'Gordita',
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal),
-                                ),
-                              )),
-                        ),
-                        Tab(
-                          child: Container(
-                              width: 83,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff8D9091)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Thursday",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      //  color: Color(0xff8D9091),
-                                      fontFamily: 'Gordita',
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal),
-                                ),
-                              )),
-                        ),
-                        Tab(
-                          child: Container(
-                              width: 83,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xff8D9091)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Friday",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      // color: Color(0xff8D9091),
-                                      fontFamily: 'Gordita',
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal),
-                                ),
-                              )),
-                        ),
+                        TabWidget(day: "Monday"),
+                        TabWidget(day: "Tuesday"),
+                        TabWidget(day: "Wednesday"),
+                        TabWidget(day: "Thurday"),
+                        TabWidget(day: "Friday"),
                       ],
                     )),
                 //Order List Tab
@@ -237,11 +148,14 @@ class _HomeScreenState extends State<HomeScreen>
                     controller: tabController,
                     children: [
                       //Order Type per day
-                      OrderList(),
-                      TuesdayOrder(),
-                      WednesdayOrder(),
-                      ThursdayOrder(),
-                      FridayOrder(),
+                      OrderList(day: "monday"),
+                      OrderList(day: "tuesday"),
+                      OrderList(day: "monday"),
+                      OrderList(day: "tuesday"),
+                      OrderList(day: "monday"),
+                      // OrderList(day: "wednesday"),
+                      // OrderList(day: "thursday"),
+                      // OrderList(day: "friday"),
                     ],
                   ),
                 ),
@@ -250,6 +164,40 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ),
+    );
+  }
+}
+
+class TabWidget extends StatelessWidget {
+  const TabWidget({
+    Key key,
+    @required this.day,
+  }) : super(key: key);
+
+  final String day;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: Container(
+          width: 83,
+          height: 38,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xff8D9091)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Center(
+            child: Text(
+              day,
+              style: TextStyle(
+                  fontSize: 14,
+                  // color: Colors.white,
+                  //color: Color(0xff8D9091),
+                  fontFamily: 'Gordita',
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal),
+            ),
+          )),
     );
   }
 }
@@ -322,7 +270,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
               ),
               child: Consumer<CartProvider>(
                 builder: (context, mycart, child) => Text(
-                  mycart.itemsCount.toString() +
+                  mycart.cartItems.length.toString() +
                       " ${mycart.meals}" +
                       " - NGN " +
                       '${mycart.totalAmount}',

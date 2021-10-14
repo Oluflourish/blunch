@@ -1,22 +1,6 @@
+import 'package:blunch/models/cart_item.dart';
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
-
-//seperate the model
-class CartItems {
-  int id;
-  String name;
-  int price;
-  int quantity;
-  String image;
-
-  CartItems({
-    this.id,
-    @required this.name,
-    @required this.price,
-    @required this.quantity,
-    @required this.image,
-  });
-}
 
 class CartProvider extends ChangeNotifier {
   ProductItems _activeitem = null;
@@ -27,15 +11,8 @@ class CartProvider extends ChangeNotifier {
     _activeitem = productItems;
   }
 
-  Map<int, CartItems> _cartItems = {};
-
-  Map<int, CartItems> get items {
-    return {..._cartItems};
-  }
-
-  int get itemsCount {
-    return _cartItems.values.length;
-  }
+  List<CartItems> cartItems = [];
+  List<int> cartItemIds = [];
 
   //total price
   int get mealSum {
@@ -47,7 +24,7 @@ class CartProvider extends ChangeNotifier {
 
   // String get meall {
   //   String meal = '';
-  //   if (_cartItems.containsKey(counter) && _cartItems.isNotEmpty) {
+  //   if (cartItems.containsKey(counter) && cartItems.isNotEmpty) {
   //     meal = 'Meals';
   //   } else {
   //     meal = "Meals";
@@ -56,17 +33,17 @@ class CartProvider extends ChangeNotifier {
   // }
 
   int itemcartPrice(int price) {
-    return _cartItems[price].price;
+    return cartItems[price].price;
   }
 
   int quantity(int id) {
-    return _cartItems[id].quantity;
+    return cartItems[id].quantity;
   }
 
   //Show Product cart
   bool get showCart {
     var value = false;
-    if (_cartItems.isEmpty) {
+    if (cartItems.isEmpty) {
       value = false;
     } else {
       value = true;
@@ -77,16 +54,18 @@ class CartProvider extends ChangeNotifier {
   //get total price
   int get totalAmount {
     var total = 0;
-    _cartItems.forEach((key, CartItems) {
-      total += CartItems.price * CartItems.quantity;
+
+    cartItems.forEach((cartItem) {
+      total += cartItem.price * cartItem.quantity;
     });
+
     return total;
   }
 
 //Meals or Meal
   String get meals {
     var meals = '';
-    var cart = items.length.toInt();
+    var cart = cartItems.length;
     if (cart == 1) {
       meals = 'meal';
     } else {
@@ -97,35 +76,25 @@ class CartProvider extends ChangeNotifier {
 
   //Delete Product
   void removeItem(String productId) {
-    _cartItems.remove(productId);
+    cartItems.remove(productId);
     notifyListeners();
   }
 
   //add cart
-  void addItems(
-    int quantity,
-    int id,
-    String name,
-    int price,
-    String image,
-  ) {
-    if (_cartItems.containsKey(id)) {
-      _cartItems.update(
-          id,
-          (value) => CartItems(
-              name: value.name,
-              price: value.price,
-              quantity: quantity,
-              image: value.image));
+  void addToCart(CartItems cartItem) {
+    print(cartItem.id);
+    if (cartItemIds.contains(cartItem.id)) {
+      print("Case 1");
+      int cartIndex = cartItemIds.indexOf(cartItem.id);
+      print("Initial: "+cartItems[cartIndex].quantity.toString());
+      cartItems[cartIndex] = cartItem;
+      print("Final: "+cartItems[cartIndex].quantity.toString());
+
     } else {
-      _cartItems.putIfAbsent(
-          id,
-          () => CartItems(
-              id: id,
-              name: name,
-              price: price,
-              quantity: quantity,
-              image: image));
+      cartItems.add(cartItem);
+      cartItemIds.add(cartItem.id);
+      print(cartItems.toString());
+      print(cartItemIds.toString());
     }
     notifyListeners();
   }
