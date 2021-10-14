@@ -1,4 +1,4 @@
-import 'package:blunch/Model/Profile_model/Profile_util.dart';
+import 'package:blunch/View/Util/Profile_util.dart';
 import 'package:blunch/Provider/CartInventory.dart';
 import 'package:blunch/Provider/CartProvider.dart';
 import 'package:blunch/Provider/FridayList.dart';
@@ -11,18 +11,19 @@ import 'package:blunch/View/Pages/Home/HomeScreen.dart';
 import 'package:blunch/View/Pages/Navigation/Drawer_Order.dart';
 import 'package:blunch/View/Pages/Navigation/Drawer_notification.dart';
 import 'package:blunch/View/Pages/User/sign_in.dart';
-import 'package:blunch/View/Util/Profile/Drawer_profile.dart';
 import 'package:blunch/View/Pages/Location/Select_Location.dart';
 import 'package:blunch/View/Pages/Home/SplashScreen.dart';
 import 'package:blunch/View/Pages/Navigation/Drawer_setting.dart';
-import 'package:blunch/View/Util/Profile/ProfileData.dart';
-import 'package:blunch/View/Util/Address/Address_book.dart';
 import 'package:blunch/View/Util/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'View/Pages/Address/Address_book.dart';
+import 'View/Pages/Checkouts/checkoutScreen.dart';
 import 'View/Pages/Component/Cart.dart';
 import 'View/Pages/Component/ForgetPassword.dart';
 import 'View/Pages/Component/ResetPassword.dart';
+import 'View/Pages/Profile/Drawer_profile.dart';
+import 'View/Pages/Profile/ProfileData.dart';
 import 'View/Pages/User/sign_up.dart';
 
 Future main() async {
@@ -98,6 +99,8 @@ class MyApp extends StatelessWidget {
           '/reset_password': (context) => ResetPassword(),
           '/sign_up': (context) => SignUp(),
           '/sign_in': (context) => SignIn(),
+          '/checkout': (context) => Checkout(),
+          //Checkout
           //  '/success_page': (context) => SuccessPage(),
         },
       ),

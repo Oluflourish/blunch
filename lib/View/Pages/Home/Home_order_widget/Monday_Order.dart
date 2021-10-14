@@ -20,7 +20,7 @@ class _OrderListState extends State<OrderList> {
       //listen: false
     );
     ProductItems product = shop.activeitem;
-    //CartItems myProduct = cartItems.activeitem;
+    ProductItems productItems;
 
     return Scaffold(
         key: _scaffoldkey,
@@ -32,7 +32,12 @@ class _OrderListState extends State<OrderList> {
               return GestureDetector(
                 onTap: () async {
                   shop.setActiveItem(shop.item[i]);
-                  buildShowModalBottomSheet(context, shop, product, cartItems);
+                  buildShowModalBottomSheet(
+                    context,
+                    shop,
+                    product,
+                    cartItems,
+                  );
                 },
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 20, top: 0),
@@ -131,7 +136,11 @@ class _OrderListState extends State<OrderList> {
   }
 
   Future buildShowModalBottomSheet(
-      BuildContext context, CartInventory shop, product, cartItems) {
+    BuildContext context,
+    CartInventory shop,
+    product,
+    cartItems,
+  ) {
     return showModalBottomSheet(
         isDismissible: false,
         isScrollControlled: true,
@@ -156,7 +165,9 @@ class _OrderListState extends State<OrderList> {
                   children: [
                     Expanded(
                         child: Text(
+                      //shop.activeitem.name,
                       shop.activeitem.name,
+                      // mycart.activeitem.name,
                       style: TextStyle(
                           fontSize: 20,
                           color: Color(0xff14142B),
@@ -186,6 +197,8 @@ class _OrderListState extends State<OrderList> {
                   width: MediaQuery.of(context).size.width,
                   child: Image.asset(
                     shop.activeitem.image,
+
+                    //  mycart.activeitem.image,
                     // shop.item.elementAt(2).image,
                     //  element['image'],
                     fit: BoxFit.cover,
@@ -194,10 +207,60 @@ class _OrderListState extends State<OrderList> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
+                Consumer<CartInventory>(
+                  builder: (context, mycart, state) =>
+                      //child:
+                      Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          height: 32,
+                          width: 32,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Color(0xff7B0304))),
+                          child: FloatingActionButton(
+                            backgroundColor: Color(0xffFFFFFF),
+                            onPressed: () {
+                              ProductItems product = shop.activeitem;
+                              // ProductItems productItems;
+                              //  CartItems cartItems = mycart.activeitem;
+                              //shop.removeI
+                              mycart.decreaseQuantity(product.id);
+                              // shop.removeItem(product);
+                            },
+                            child: Icon(
+                              Icons.remove,
+                              size: 17,
+                              color: Color(0xff7B0304),
+                            ),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+
+                        //child: Consumer<CartInventory>(
+                        //builder: (context, mycart, child) =>
+                        child: Text(
+                          shop.activeitem.quantity.toString(),
+                          //  shop.
+                          // (mycart.activeitem.quantity * mycart.counter)
+                          //     .toString(),
+                          //  '${mycart.totalOrder}',
+                          //  mycart.totalOrder.toString(),
+
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff1A1A1A),
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                      // ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
                         height: 32,
                         width: 32,
                         decoration: BoxDecoration(
@@ -207,53 +270,20 @@ class _OrderListState extends State<OrderList> {
                           backgroundColor: Color(0xffFFFFFF),
                           onPressed: () {
                             ProductItems product = shop.activeitem;
-                            shop.removeItem(product);
+                            //  ProductItems productItems;
+                            mycart.addQuantity(product.id);
+                            // CartItems cartItems = mycart.activeitem;
+                            // shop.addItem(product);
                           },
                           child: Icon(
-                            Icons.remove,
+                            Icons.add,
                             size: 17,
                             color: Color(0xff7B0304),
                           ),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(14.0),
-                      child: Consumer<CartInventory>(
-                        builder: (context, mycart, child) => Text(
-                          // (mycart.activeitem.quantity * mycart.counter)
-                          //     .toString(),
-                          '${mycart.totalOrder}',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff1A1A1A),
-                              fontFamily: 'Gordita',
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Container(
-                      height: 32,
-                      width: 32,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Color(0xff7B0304))),
-                      child: FloatingActionButton(
-                        backgroundColor: Color(0xffFFFFFF),
-                        onPressed: () {
-                          ProductItems product = shop.activeitem;
-                          shop.addItem(product);
-                        },
-                        child: Icon(
-                          Icons.add,
-                          size: 17,
-                          color: Color(0xff7B0304),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Container(
                   child: Padding(
@@ -317,18 +347,11 @@ class _OrderListState extends State<OrderList> {
                         onPressed: () {
                           Navigator.pop(context);
                           ProductItems product = shop.activeitem;
-                          cartItems.getcarttotaltest(
-                              product.quantity,
-                              product.id,
-                              product.name,
-                              product.price,
-                              product.image);
-                          cartItems.addItems(
-                              //product.quantity,
-                              product.id,
-                              product.name,
-                              product.price,
-                              product.image);
+                          //shop.activeitem.quantity
+                          //send quantity to cart
+
+                          cartItems.addItems(product.quantity, product.id,
+                              product.name, product.price, product.image);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),

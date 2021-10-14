@@ -4,12 +4,12 @@ import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Wednesday_Order extends StatefulWidget {
+class WednesdayOrder extends StatefulWidget {
   @override
-  _Wednesday_OrderState createState() => _Wednesday_OrderState();
+  _WednesdayOrderState createState() => _WednesdayOrderState();
 }
 
-class _Wednesday_OrderState extends State<Wednesday_Order> {
+class _WednesdayOrderState extends State<WednesdayOrder> {
   @override
   Widget build(BuildContext context) {
     final wednesday = Provider.of<DayThree>(context);

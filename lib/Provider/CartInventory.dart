@@ -11,25 +11,25 @@ class CartInventory extends ChangeNotifier {
   CartInventory() {
     _items = [
       ProductItems(
-          id: 1,
+          id: 0,
           image: "assets/egg_mayo.png",
           name: "Egg & Mayo Sandwich",
           quantity: 1,
           price: 1500),
       ProductItems(
-          id: 2,
+          id: 1,
           image: ("assets/suya_stirfry.png"),
           name: "Suya Stir Fry Noodles",
           quantity: 1,
           price: 1000),
       ProductItems(
-          id: 3,
+          id: 2,
           image: ("assets/suya_stirfryy.png"),
           name: "Suya Stir Fry Noodles + Extra Suya",
           quantity: 1,
           price: 1500),
       ProductItems(
-          id: 4,
+          id: 3,
           image: ("assets/zobo.png"),
           name: "Zobo",
           quantity: 1,
@@ -48,18 +48,18 @@ class CartInventory extends ChangeNotifier {
     _activeitem = productItems;
   }
 
-  addItemToCart(ProductItems productItems) {
-    ProductItems found = _items.firstWhere(
-        (element) => element.id == productItems.id,
-        orElse: () => null);
-    if (found != null) {
-      found.quantity += 1;
-    } else {
-      _items.add(productItems);
-      productItems.quantity += 1;
-    }
-    notifyListeners();
-  }
+  // addItemToCart(ProductItems productItems) {
+  //   ProductItems found = _items.firstWhere(
+  //       (element) => element.id == productItems.id,
+  //       orElse: () => null);
+  //   if (found != null) {
+  //     found.quantity += 1;
+  //   } else {
+  //     _items.add(productItems);
+  //     productItems.quantity += 1;
+  //   }
+  //   notifyListeners();
+  // }
 
   addItem(ProductItems productItems) {
     ProductItems found = _items.firstWhere(
@@ -70,6 +70,16 @@ class CartInventory extends ChangeNotifier {
     } else {
       productItems.quantity += 1;
     }
+    notifyListeners();
+  }
+
+  addQuantity(id) {
+    item[id].quantity++;
+    notifyListeners();
+  }
+
+  decreaseQuantity(id) {
+    if (item[id].quantity > 1) item[id].quantity--;
     notifyListeners();
   }
 
@@ -92,6 +102,12 @@ class CartInventory extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteItems(String productId) {
+    _items.remove(productId);
+    //_cartItems.remove(productId);
+    notifyListeners();
+  }
+
   int quantity(int id) {
     return cart[id].quantity;
   }
@@ -104,19 +120,19 @@ class CartInventory extends ChangeNotifier {
   //   return total;
   // }
 
-  removeItemFromCart(ProductItems productItems) {
-    ProductItems found = _items.firstWhere(
-        (element) => element.id == productItems.id,
-        orElse: () => null);
-    if (found != null && found.quantity == 1) {
-      productItems.quantity = 1;
-      _items.remove(productItems);
-    }
-    if (found != null && found.quantity > 1) {
-      found.quantity -= 1;
-    }
-    notifyListeners();
-  }
+  // removeItemFromCart(ProductItems productItems) {
+  //   ProductItems found = _items.firstWhere(
+  //       (element) => element.id == productItems.id,
+  //       orElse: () => null);
+  //   if (found != null && found.quantity == 1) {
+  //     productItems.quantity = 1;
+  //     _items.remove(productItems);
+  //   }
+  //   if (found != null && found.quantity > 1) {
+  //     found.quantity -= 1;
+  //   }
+  //   notifyListeners();
+  // }
 
   getCartPrice(ProductItems productItems) {
     // setActiveItem(productItems);

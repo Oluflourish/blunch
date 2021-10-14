@@ -1,9 +1,10 @@
-import 'package:blunch/Model/Profile_model/Profile_util.dart';
+import 'package:blunch/View/Util/Profile_util.dart';
 import 'package:blunch/Provider/ProfileProvider.dart';
-import 'package:blunch/View/Util/Profile/EditProfile.dart';
-import 'package:blunch/View/Util/Profile/ProfileData.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'ProfileData.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

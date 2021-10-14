@@ -147,7 +147,8 @@ class _SignInState extends State<SignIn> {
                         textColor: Colors.white,
                         onPressed: () {
                           if (formKey.currentState.validate()) {
-                            Navigator.of(context).pop(true);
+                            // Navigator.of(context).pop(true);
+                            Navigator.pushNamed(context, '/success_page');
                           }
                         },
                         shape: RoundedRectangleBorder(

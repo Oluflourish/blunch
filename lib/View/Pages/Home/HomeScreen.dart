@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen>
                       //Order Type per day
                       OrderList(),
                       TuesdayOrder(),
-                      Wednesday_Order(),
+                      WednesdayOrder(),
                       ThursdayOrder(),
                       FridayOrder(),
                     ],

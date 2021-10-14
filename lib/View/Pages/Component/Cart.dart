@@ -1,7 +1,6 @@
 import 'package:blunch/Provider/CartInventory.dart';
 import 'package:blunch/Provider/CartProvider.dart';
-import 'package:blunch/View/Pages/Widgets/cart_util.dart';
-import 'package:blunch/models/item.dart';
+import 'package:blunch/View/Util/cart_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
-    final shop = Provider.of<CartProvider>(context);
+    final shop = Provider.of<CartProvider>(context, listen: false);
     // ProductItems productItems = shop.activeitem;
     return Scaffold(
         backgroundColor: Colors.white,
@@ -41,14 +40,20 @@ class _CartScreenState extends State<CartScreen> {
                   //physics: BouncingScrollPhysics,
                   shrinkWrap: true,
                   itemCount: shop.items.length,
-                  itemBuilder: (context, index) => CartUtil(
-                      price: shop.items.values.toList()[index].price,
-                      image: shop.items.values.toList()[index].image,
-                      name: shop.items.values.toList()[index].name,
-                      quantity: shop.items.values.toList()[index].quantity)),
+                  itemBuilder: (context, index) =>
+                      //cart card
+                      CartUtil(
+                          cart: shop.items[index],
+                          price: shop.items.values.toList()[index].price,
+                          image: shop.items.values.toList()[index].image,
+                          name: shop.items.values.toList()[index].name,
+                          //delete operation
+                          productId: shop.items.keys.toList()[index].toString(),
+                          quantity:
+                              shop.items.values.toList()[index].quantity)),
             ),
 
-            Spacer(),
+            //Spacer(),
             Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 24, bottom: 16),
               child: Column(
@@ -57,17 +62,23 @@ class _CartScreenState extends State<CartScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Sub-total( 1 Meal)",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontFamily: 'Gordita',
-                            fontWeight: FontWeight.w700,
-                            fontStyle: FontStyle.normal),
+                      Consumer<CartInventory>(
+                        builder: (context, mycart, child) => Text(
+                          "Sub-total (" +
+                              // shop.itemsCount.toString()
+                              '${shop.itemsCount} ' +
+                              "${shop.meals}" +
+                              ')',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: 'Gordita',
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal),
+                        ),
                       ),
                       Text(
-                        'NGN ',
+                        'NGN ' + 'total',
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -77,9 +88,9 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ],
                   ),
-                  // SizedBox(
-                  //   height: 21,
-                  // ),
+                  SizedBox(
+                    height: 21,
+                  ),
                   Container(
                     height: 60,
                     width: double.infinity,
@@ -96,7 +107,7 @@ class _CartScreenState extends State<CartScreen> {
                       color: Color(0xfff7B0304),
                       textColor: Colors.white,
                       onPressed: () {
-                        Navigator.pushNamed(context, '/sign_up');
+                        Navigator.pushNamed(context, '/checkout');
                         //push(context, '/sign_up');
                       },
                       shape: RoundedRectangleBorder(

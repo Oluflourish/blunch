@@ -1,6 +1,7 @@
 import 'package:blunch/models/item.dart';
 import 'package:flutter/material.dart';
 
+//seperate the model
 class CartItems {
   int id;
   String name;
@@ -18,16 +19,15 @@ class CartItems {
 }
 
 class CartProvider extends ChangeNotifier {
+  ProductItems _activeitem = null;
+  int counter = 1;
+  ProductItems get activeItem => _activeitem;
+
+  setActiveItem(ProductItems productItems) {
+    _activeitem = productItems;
+  }
+
   Map<int, CartItems> _cartItems = {};
-  // List<ProductItems> _items = [];
-//  CartItems get activeitem => _activeitem;
-  // CartItems _activeitem = null;
-
-  // setActiveItem(CartItems cartItems) {
-  //   _activeitem = cartItems;
-  // }
-
-  // List<ProductItems> get cart => _items;
 
   Map<int, CartItems> get items {
     return {..._cartItems};
@@ -37,85 +37,22 @@ class CartProvider extends ChangeNotifier {
     return _cartItems.values.length;
   }
 
-  //addItem(ProductItems productItems) {
-  //   ProductItems found = _items.firstWhere(
-  //       (element) => element.id == productItems.id,
-  //       orElse: () => null);
-  //   if (found != null) {
-  //     found.quantity += 1;
+  //total price
+  int get mealSum {
+    var counter = 1;
+    counter = activeItem.quantity * counter;
+
+    return counter;
+  }
+
+  // String get meall {
+  //   String meal = '';
+  //   if (_cartItems.containsKey(counter) && _cartItems.isNotEmpty) {
+  //     meal = 'Meals';
   //   } else {
-  //     productItems.quantity += 1;
+  //     meal = "Meals";
   //   }
-  //   notifyListeners();
-  // }
-
-  // int get totalOrder {
-  //   var counter = 1;
-  //   counter = activeitem.quantity * counter;
-  //   return counter;
-  // }
-
-  // int get totalPriceAmount {
-  //   var total = 0;
-  //   _cartItems.forEach((key, activeItems) {
-  //     total = activeitem.quantity
-
-  //   });
-  // }
-
-  void getcarttotaltest(
-      int id, int quantity, String name, int price, String image) {
-    if (_cartItems.containsKey(id)) {
-      _cartItems.update(
-          id,
-          (value) => CartItems(
-              name: name, price: price, quantity: quantity++, image: image));
-    } else {
-      _cartItems.putIfAbsent(
-          id,
-          () => CartItems(
-              id: id, name: name, price: price, quantity: 1, image: image));
-    }
-    notifyListeners();
-  }
-
-  // int get totalOrderP {
-  // _cartItems.forEach((id, CartItems) {
-  //   counter = CartItems.quantity + 1;
-  //   return counter;
-  // });
-//  }
-
-  // int get selectCartPrice {
-  //   var price = activeitem.price * activeitem.quantity;
-  //   return price;
-  // }
-
-  String get meall {
-    String meal = '';
-    if (_cartItems.containsKey(counter) && _cartItems.isNotEmpty) {
-      meal = 'Meals';
-    } else {
-      meal = "Meals";
-    }
-    return meal;
-  }
-
-  // int getTot(CartItems cartItems) {
-  //   int total = 0;
-  //   for (CartItems p in cartItems) {
-  //     total += (p.price * p.id);
-  //   }
-  //   return total;
-  // }
-  // int get cartpricet {
-  //   return _cartItems;
-  // }
-
-  // int getTotal get {
-  //   int total;
-  //   total = activeitem.price * activeitem.quantity;
-
+  //   return meal;
   // }
 
   int itemcartPrice(int price) {
@@ -126,6 +63,7 @@ class CartProvider extends ChangeNotifier {
     return _cartItems[id].quantity;
   }
 
+  //Show Product cart
   bool get showCart {
     var value = false;
     if (_cartItems.isEmpty) {
@@ -136,6 +74,7 @@ class CartProvider extends ChangeNotifier {
     return value;
   }
 
+  //get total price
   int get totalAmount {
     var total = 0;
     _cartItems.forEach((key, CartItems) {
@@ -156,17 +95,15 @@ class CartProvider extends ChangeNotifier {
     return meals;
   }
 
-  // void getpricetest(
-  //     int id, String name, int price, String image, int quantity) {
-  //   if (_cartItems.containsKey(id)) {
-  //     _cartItems.update(
-  //         id,
-  //         (value) => CartItems(
-  //             name: name, price: price, quantity: quantity, image: image));
-  //   }
-  // }
+  //Delete Product
+  void removeItem(String productId) {
+    _cartItems.remove(productId);
+    notifyListeners();
+  }
 
+  //add cart
   void addItems(
+    int quantity,
     int id,
     String name,
     int price,
@@ -178,27 +115,20 @@ class CartProvider extends ChangeNotifier {
           (value) => CartItems(
               name: value.name,
               price: value.price,
-              quantity: value.quantity + 1,
+              quantity: quantity,
               image: value.image));
     } else {
       _cartItems.putIfAbsent(
           id,
           () => CartItems(
-              id: id, name: name, price: price, quantity: 1, image: image));
+              id: id,
+              name: name,
+              price: price,
+              quantity: quantity,
+              image: image));
     }
     notifyListeners();
   }
 
-  int counter = 1;
-
-  // getCartQuantity(CartItems productItems) {
-  //   int p = 0;
-  //   if (_activeitem.quantity == 1) {
-  //     p = _activeitem.quantity;
-  //   } else {
-  //     p = _activeitem.quantity;
-  //   }
-
-  //   return p;
-  // }
+  //int counter = 1;
 }
